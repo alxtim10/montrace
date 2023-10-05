@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAppSelector } from "@/utils/store/hooks";
-import { currentTracker } from "@/utils/store/trackerSwitch";
+import { useAppSelector } from "@/stores/hooks";
 import { DatePicker } from "../picker/DatePicker";
 import {
   DropdownMenu,
@@ -9,10 +8,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import "./Tracker.css";
+import "./TrackerHome.css";
 import { expenseCategory, savingsCategory } from "@/data/categoryData";
+import { currentTracker } from "@/stores/trackerSwitch";
 
-const Tracker = () => {
+const TrackerHome = () => {
   const trackerType = useAppSelector(currentTracker);
   const [category, setCategory] = useState("Category");
   const [listCategory, setListCategory] = useState<any>([]);
@@ -84,4 +84,4 @@ const Tracker = () => {
   );
 };
 
-export default Tracker;
+export default TrackerHome;

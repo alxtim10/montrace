@@ -10,8 +10,9 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { useAppDispatch } from "@/utils/store/hooks";
-import { switcher } from "@/utils/store/trackerSwitch";
+import { useAppDispatch } from "@/stores/hooks";
+import Link from "next/link";
+import { switcher } from "@/stores/trackerSwitch";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -34,7 +35,6 @@ const components: { title: string; href: string; description: string }[] = [
   },
 ];
 
-
 export function NavigationMenuDemo() {
   const dispatch = useAppDispatch();
 
@@ -46,7 +46,7 @@ export function NavigationMenuDemo() {
             <NavigationMenuTrigger>Dashboard</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                <ListItem href="/docs" title="Timeline">
+                <ListItem href="/tracker/timeline" title="Timeline">
                   View your saving and expense timeline.
                 </ListItem>
                 <ListItem href="/docs/primitives/typography" title="Profile">
@@ -62,10 +62,20 @@ export function NavigationMenuDemo() {
             <NavigationMenuTrigger>Tracker</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                <ListItem onClick={() => dispatch(switcher("Expense"))} title="Expense">
+                <ListItem
+                  href="/tracker"
+                  onClick={() => dispatch(switcher("Expense"))}
+                  title="Expense"
+                >
                   Track your expenses.
                 </ListItem>
-                <ListItem onClick={() => dispatch(switcher("Saving"))} title="Saving">Track your savings.</ListItem>
+                <ListItem
+                  href="/tracker"
+                  onClick={() => dispatch(switcher("Saving"))}
+                  title="Saving"
+                >
+                  Track your savings.
+                </ListItem>
                 <ListItem
                   href="/docs/installation"
                   title="Expense & Saving Data"

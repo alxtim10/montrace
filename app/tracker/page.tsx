@@ -1,23 +1,21 @@
 "use client"
 
-import Timeline from "@/components/tracker/Timeline";
-import { NavigationMenuDemo } from "@/components/navigation/NavigationMenu";
-import Tracker from "@/components/tracker/Tracker";
+import HomeTimeline from "@/components/tracker/HomeTimeline";
+import TrackerHome from "@/components/tracker/TrackerHome";
 
 export default function Home() {
 
   return (
     <>
-        <NavigationMenuDemo />
-        <div className="2xl:flex justify-between">
+        <section className="2xl:flex justify-between">
           <div className=" 2xl:fixed xl:top-[18%] xl:left-[10%]">
-            <Tracker />
+            <TrackerHome />
           </div>
           <div></div>
-          <div className="">
-            <Timeline />
+          <div>
+            <HomeTimeline />
           </div>
-        </div>
+        </section>
     </>
   );
 }
