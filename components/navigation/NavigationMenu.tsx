@@ -64,17 +64,9 @@ export function NavigationMenuDemo() {
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                 <ListItem
                   href="/tracker"
-                  onClick={() => dispatch(switcher("Expense"))}
-                  title="Expense"
+                  title="Tracker"
                 >
-                  Track your expenses.
-                </ListItem>
-                <ListItem
-                  href="/tracker"
-                  onClick={() => dispatch(switcher("Saving"))}
-                  title="Saving"
-                >
-                  Track your savings.
+                  Track your expenses and savings.
                 </ListItem>
                 <ListItem
                   href="/docs/installation"

@@ -7,7 +7,7 @@ const HomeTimeline = () => {
     <section className="p-20 min-h-screen">
       <h1 className="text-center">recent money thrown</h1>
       <div className="mt-10 flex flex-col gap-5 justify-center items-center">
-        {mainTimelineData.slice(0, 5).map((data, i) => {
+        {mainTimelineData.slice(0, 10).map((data, i) => {
           return (
             <div key={i} className="bg-white p-5 rounded-lg w-full shadow-2xl md:w-[35rem] text-black">
               <HomeTimelineCard data={data}/>

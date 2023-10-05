@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAppSelector } from "@/stores/hooks";
+import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { DatePicker } from "../picker/DatePicker";
 import {
   DropdownMenu,
@@ -10,12 +10,16 @@ import {
 } from "../ui/dropdown-menu";
 import "./TrackerHome.css";
 import { expenseCategory, savingsCategory } from "@/data/categoryData";
-import { currentTracker } from "@/stores/trackerSwitch";
+import { currentTracker, switcher } from "@/stores/trackerSwitch";
+import { typeData } from "@/data/typeData";
 
 const TrackerHome = () => {
+  const dispatch = useAppDispatch();
   const trackerType = useAppSelector(currentTracker);
   const [category, setCategory] = useState("Category");
+  const [type, setType] = useState<String>("Type");
   const [listCategory, setListCategory] = useState<any>([]);
+  const [listType] = useState<any>(typeData);
 
   useEffect(() => {
     if (trackerType === "Expense") {
@@ -24,6 +28,12 @@ const TrackerHome = () => {
       setListCategory(savingsCategory);
     }
   }, [trackerType]);
+
+  const handleType = (type: String) => {
+    dispatch(switcher(type));
+    setType(type);
+    setCategory("Category");
+  }
 
   return (
     <section className="p-10 md:p-20 flex justify-center items-center w-full">
@@ -36,7 +46,10 @@ const TrackerHome = () => {
         <h1 className="text-2xl tracking-wider text-center">
           shoot your {trackerType.toLowerCase()}
         </h1>
-        <div className="flex flex-col gap-5 mt-10 justify-center items-center">
+        <div className="flex justify-center items-center mt-10 md:ml-24">
+          <DatePicker />
+        </div>
+        <div className="flex flex-col gap-5  justify-center items-center">
           <div className="input-container">
             <input
               placeholder="Title"
@@ -56,13 +69,27 @@ const TrackerHome = () => {
             <span className="input-highlight"></span>
           </div>
           <div className="flex justify-around items-center w-full">
-            <DatePicker />
-            <div className="flex justify-center">
+            <div className="flex justify-center w-40">
+              <DropdownMenu>
+                <DropdownMenuTrigger>{type}</DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuSeparator />
+                  {listType.map((data: any, i: number) => {
+                    return (
+                      <div key={i} onClick={() => handleType(data)}>
+                        <DropdownMenuItem>{data}</DropdownMenuItem>
+                      </div>
+                    );
+                  })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            <div className="flex justify-center w-40">
               <DropdownMenu>
                 <DropdownMenuTrigger>{category}</DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuSeparator />
-                  {listCategory.map((data:any, i:number) => {
+                  {listCategory.map((data: any, i: number) => {
                     return (
                       <div key={i} onClick={() => setCategory(data.name)}>
                         <DropdownMenuItem>{data.name}</DropdownMenuItem>
