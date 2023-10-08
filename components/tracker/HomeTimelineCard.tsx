@@ -1,17 +1,19 @@
+import { toRupiah } from "@/utils/format";
 import React, { FC } from "react";
 
 const HomeTimelineCard: React.FC<any> = (props) => {
-  const { title, nominal, type, category } = props.data;
+  const { name, type, category } = props.data;
   let options = {
     dateStyle: 'short',
     timeStyle: 'short'
   }
   const date = props.data.date.toLocaleString('id-ID', options);
+  const nominal = toRupiah(props.data.nominal);
 
   return (
     <div className="">
       <div className="flex justify-between items-center gap-3">
-        <h1 className="text-md md:text-xl font-bold">{title}</h1>
+        <h1 className="text-md md:text-xl font-bold">{name}</h1>
         <p className="text-sm md:text-lg">{date}</p>
       </div>
       <p className="mt-2 text-sm">

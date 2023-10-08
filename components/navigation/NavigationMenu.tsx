@@ -1,5 +1,6 @@
-import * as React from "react";
+"use client"
 
+import * as React from "react";
 import { cn } from "@/lib/utils";
 import {
   NavigationMenu,
@@ -10,9 +11,6 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { useAppDispatch } from "@/stores/hooks";
-import Link from "next/link";
-import { switcher } from "@/stores/trackerSwitch";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -36,7 +34,6 @@ const components: { title: string; href: string; description: string }[] = [
 ];
 
 export function NavigationMenuDemo() {
-  const dispatch = useAppDispatch();
 
   return (
     <section className="flex justify-center items-center">
