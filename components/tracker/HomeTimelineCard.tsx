@@ -1,13 +1,10 @@
-import { toRupiah } from "@/utils/format";
+import { toRupiah, toDate } from "@/utils/format";
 import React, { FC } from "react";
+import moment from 'moment'
 
 const HomeTimelineCard: React.FC<any> = (props) => {
   const { name, type, category } = props.data;
-  let options = {
-    dateStyle: 'short',
-    timeStyle: 'short'
-  }
-  const date = props.data.date.toLocaleString('id-ID', options);
+  const date = toDate(props.data.date);
   const nominal = toRupiah(props.data.nominal);
 
   return (

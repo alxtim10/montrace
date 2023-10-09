@@ -2,19 +2,29 @@
 
 import HomeTimeline from "@/components/tracker/HomeTimeline";
 import TrackerHome from "@/components/tracker/TrackerHome";
-import { Toaster } from "@/components/ui/toaster";
 import { useFetchToken } from "@/features/dashboard";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 import { useDispatch } from "react-redux";
-import { currentAccessToken, setToken } from "@/stores/tokenState";
-import { axiosJWT } from "@/lib/axios";
-import { useAppSelector } from "@/stores/hooks";
+import { setToken } from "@/stores/tokenState";
+import { useFetchTracker } from "@/features/tracker";
 
 export default function Home() {
+  
+  const {
+    data,
+    refetch: fetchTracker,
+  } = useFetchTracker({
+    onSuccess: (data: any) => {
+      setTimeLineData(data);
+    },
+    onError: () => {
+
+    },
+  });
+
   const dispatch = useDispatch();
-  const stateToken = useAppSelector(currentAccessToken);
   const { push } = useRouter();
   const [timelineData, setTimeLineData] = useState([]);
 
@@ -28,33 +38,28 @@ export default function Home() {
           token: data.accessToken,
         })
       );
-
-      getTrackers(data.accessToken);
     },
     onError: () => {
       push("/");
     },
   });
 
-  const getTrackers = async (firstToken: any) => {
-    const response = await axiosJWT.get("http://localhost:2000/tracker", {
-      headers: {
-        Authorization: `Bearer ${firstToken}`,
-      },
-    });
-    console.log(response.data);
-    setTimeLineData(response.data);
-  };
+
+  const refetchTracker = () => {
+    fetchTracker();
+  }
 
   useEffect(() => {
     refreshToken();
+    fetchTracker();
   }, []);
+
 
   return (
     <>
       <section className="2xl:flex justify-between">
         <div className=" 2xl:fixed xl:top-[18%] xl:left-[10%]">
-          <TrackerHome />
+          <TrackerHome refetchTracker={refetchTracker}/>
         </div>
         <div></div>
         <div>
@@ -62,7 +67,6 @@ export default function Home() {
         </div>
       </section>
 
-      <Toaster />
     </>
   );
 }

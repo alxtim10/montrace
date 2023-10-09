@@ -23,14 +23,14 @@ export default function Home() {
     onSubmit: async () => {
       setErrorMsg("");
       const { email, password } = formik.values;
-      registerUser({
+      loginUser({
         email,
         password,
       });
     },
   });
 
-  const { mutate: registerUser, data } = useLogin({
+  const { mutate: loginUser, data } = useLogin({
     onError: (error: any) => {
       setErrorMsg(error);
 

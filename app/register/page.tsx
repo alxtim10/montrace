@@ -4,7 +4,6 @@ import Navbar from "@/components/navigation/Navbar";
 import { useFormik } from "formik";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
-import { ToastAction } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
 import { useRegister } from "@/features/account";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -42,7 +41,6 @@ export default function Home() {
   const { mutate: registerUser, data } = useRegister({
     onError: (error: any) => {
       setErrorMsg(error);
-      
       setIsLoading(false);
     },
     onSuccess: (res: any) => {
@@ -58,7 +56,7 @@ export default function Home() {
   });
 
   const redirect = () => {
-    push("/tracker");
+    push("/login");
   };
 
   const handleFormInput = (event: any) => {

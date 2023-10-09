@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/toaster";
 import Link from "next/link";
 
 export default function Home() {
@@ -6,19 +7,19 @@ export default function Home() {
       <section className="flex flex-col items-center px-2 lg:flex-row lg:min-h-screen">
         <div className="p-20 min-h-[50vh] flex flex-col justify-center w-full">
           <h1 className="text-4xl lg:text-6xl text-[#1234c4] font-bold">
-            alx montrac.e
+            montrac.e
           </h1>
           <h1 className="text-4xl lg:text-6xl text-[#1233c4dc] font-bold">
-            alx montrac.e
+            montrac.e
           </h1>
           <h1 className="text-4xl lg:text-6xl text-[#1233c4cc] font-bold">
-            alx montrac.e
+            montrac.e
           </h1>
           <h1 className="text-4xl lg:text-6xl text-[#1233c4bc] font-bold">
-            alx montrac.e
+            montrac.e
           </h1>
           <h1 className="text-4xl lg:text-6xl text-[#1233c4ac] font-bold">
-            alx montrac.e
+            montrac.e
           </h1>
           <p className="text-xl lg:text-2xl mt-2 tracking-wider font-semibold">
             simplify your spending, amplify your savings
@@ -48,6 +49,8 @@ export default function Home() {
           </Link>
         </div>
       </section>
+      
+      <Toaster />
     </>
   );
 }

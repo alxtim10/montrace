@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
@@ -11,6 +11,10 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
+import { useLogout } from "@/features/account/useLogout";
+import { useToast } from "../ui/use-toast";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -34,6 +38,39 @@ const components: { title: string; href: string; description: string }[] = [
 ];
 
 export function NavigationMenuDemo() {
+  const router = useRouter();
+  const { toast } = useToast();
+  const handlePurchase = async () => {
+    Swal.fire({
+      title: "Confirmation",
+      text: "Log out of montrac.e?",
+      icon: "info",
+      confirmButtonText: "Log out",
+      showCancelButton: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logoutUser();
+      }
+    });
+  };
+
+  const { mutate: logoutUser } = useLogout({
+    onError: (error: any) => {
+    },
+    onSuccess: (res: any) => {
+
+      toast({
+        title: res,
+        description: "Logout Successfully",
+      });
+
+      setTimeout(redirect, 1200);
+    },
+  });
+
+  const redirect = () => {
+    router.push("/");
+  };
 
   return (
     <section className="flex justify-center items-center">
@@ -52,6 +89,9 @@ export function NavigationMenuDemo() {
                 <ListItem href="/docs/installation" title="About Us">
                   Yeah about us.
                 </ListItem>
+                <ListItem onClick={handlePurchase} title="Log Out">
+                  Log out your account.
+                </ListItem>
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
@@ -59,10 +99,7 @@ export function NavigationMenuDemo() {
             <NavigationMenuTrigger>Tracker</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                <ListItem
-                  href="/tracker"
-                  title="Tracker"
-                >
+                <ListItem href="/tracker" title="Tracker">
                   Track your expenses and savings.
                 </ListItem>
                 <ListItem
