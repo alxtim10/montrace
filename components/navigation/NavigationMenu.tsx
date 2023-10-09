@@ -16,31 +16,10 @@ import { useRouter } from "next/navigation";
 import { useLogout } from "@/features/account/useLogout";
 import { useToast } from "../ui/use-toast";
 
-const components: { title: string; href: string; description: string }[] = [
-  {
-    title: "Expense Tracker",
-    href: "/docs/primitives/alert-dialog",
-    description:
-      "A modal dialog that interrupts the user with important content and expects a response.",
-  },
-  {
-    title: "Saving Tracker",
-    href: "/docs/primitives/hover-card",
-    description:
-      "For sighted users to preview content available behind a link.",
-  },
-  {
-    title: "Expense & Saving Data",
-    href: "/docs/primitives/hover-card",
-    description:
-      "For sighted users to preview content available behind a link.",
-  },
-];
-
 export function NavigationMenuDemo() {
   const router = useRouter();
   const { toast } = useToast();
-  const handlePurchase = async () => {
+  const handleLogout = async () => {
     Swal.fire({
       title: "Confirmation",
       text: "Log out of montrac.e?",
@@ -54,22 +33,23 @@ export function NavigationMenuDemo() {
     });
   };
 
+  const logoutRedirect = () => {
+    router.push("/");
+  };
   const { mutate: logoutUser } = useLogout({
-    onError: (error: any) => {
-    },
+    onError: (error: any) => {},
     onSuccess: (res: any) => {
-
       toast({
         title: res,
         description: "Logout Successfully",
       });
 
-      setTimeout(redirect, 1200);
+      setTimeout(logoutRedirect, 1200);
     },
   });
 
-  const redirect = () => {
-    router.push("/");
+  const dashboardRedirect = (page: String) => {
+    router.push("/tracker/" + page);
   };
 
   return (
@@ -80,16 +60,15 @@ export function NavigationMenuDemo() {
             <NavigationMenuTrigger>Dashboard</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                <ListItem href="/tracker/timeline" title="Timeline">
+                <ListItem
+                  onClick={() => dashboardRedirect("timeline")}
+                  title="Timeline"
+                >
                   View your saving and expense timeline.
                 </ListItem>
-                <ListItem href="/docs/primitives/typography" title="Profile">
-                  Edit your profile.
-                </ListItem>
-                <ListItem href="/docs/installation" title="About Us">
-                  Yeah about us.
-                </ListItem>
-                <ListItem onClick={handlePurchase} title="Log Out">
+                <ListItem title="Profile">Edit your profile.</ListItem>
+                <ListItem title="About Us">Yeah about us.</ListItem>
+                <ListItem onClick={handleLogout} title="Log Out">
                   Log out your account.
                 </ListItem>
               </ul>
@@ -99,13 +78,10 @@ export function NavigationMenuDemo() {
             <NavigationMenuTrigger>Tracker</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                <ListItem href="/tracker" title="Tracker">
+                <ListItem onClick={() => dashboardRedirect("")} title="Tracker">
                   Track your expenses and savings.
                 </ListItem>
-                <ListItem
-                  href="/docs/installation"
-                  title="Expense & Saving Data"
-                >
+                <ListItem title="Expense & Saving Data">
                   See your expenses and savings data.
                 </ListItem>
               </ul>

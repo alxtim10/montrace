@@ -57,9 +57,9 @@ export default function Home() {
   };
 
   return (
-    <>
+    <section className="">
       <Navbar />
-      <section className="mt-44 p-10 flex justify-center items-center max-h-screen">
+      <section className="mt-20 md:mt-28 2xl:mt-56 p-10 flex justify-center items-center">
         <div className="w-[25rem] md:w-[35rem] h-[25rem] mx-auto bg-[#e8e8e8] rounded-xl shadow-2xl">
           <div className="flex items-center p-3">
             <div className="px-1">
@@ -111,6 +111,6 @@ export default function Home() {
           ) : null}
         </div>
       </section>
-    </>
+    </section>
   );
 }

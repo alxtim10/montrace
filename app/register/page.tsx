@@ -66,7 +66,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <section className="mt-24 p-10 flex justify-center items-center max-h-screen">
+      <section className="mt-20 md:mt-28 2xl:mt-56 p-10 flex justify-center items-center max-h-screen">
         <div className="w-[25rem] md:w-[35rem] h-[35rem] mx-auto bg-[#e8e8e8] rounded-xl shadow-2xl">
           <div className="flex items-center p-3">
             <div className="px-1">

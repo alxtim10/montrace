@@ -6,22 +6,22 @@ export default function Home() {
     <>
       <section className="flex flex-col items-center px-2 lg:flex-row lg:min-h-screen">
         <div className="p-20 min-h-[50vh] flex flex-col justify-center w-full">
-          <h1 className="text-4xl lg:text-6xl text-[#1234c4] font-bold">
+          <h1 className="text-2xl lg:text-6xl text-[#1234c4] font-bold">
             montrac.e
           </h1>
-          <h1 className="text-4xl lg:text-6xl text-[#1233c4dc] font-bold">
+          <h1 className="text-2xl lg:text-6xl text-[#1233c4dc] font-bold">
             montrac.e
           </h1>
-          <h1 className="text-4xl lg:text-6xl text-[#1233c4cc] font-bold">
+          <h1 className="text-2xl lg:text-6xl text-[#1233c4cc] font-bold">
             montrac.e
           </h1>
-          <h1 className="text-4xl lg:text-6xl text-[#1233c4bc] font-bold">
+          <h1 className="text-2xl lg:text-6xl text-[#1233c4bc] font-bold">
             montrac.e
           </h1>
-          <h1 className="text-4xl lg:text-6xl text-[#1233c4ac] font-bold">
+          <h1 className="text-2xl lg:text-6xl text-[#1233c4ac] font-bold">
             montrac.e
           </h1>
-          <p className="text-xl lg:text-2xl mt-2 tracking-wider font-semibold">
+          <p className="text-lg lg:text-2xl mt-2 tracking-wider font-semibold">
             simplify your spending, amplify your savings
           </p>
         </div>
@@ -41,15 +41,9 @@ export default function Home() {
           >
             REGISTER
           </Link>
-          <Link
-            href="/tracker"
-            className="text-white hover:underline cursor-pointer"
-          >
-            Guest
-          </Link>
         </div>
       </section>
-      
+
       <Toaster />
     </>
   );

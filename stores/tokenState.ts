@@ -3,13 +3,13 @@ import { RootState, AppThunk } from './store';
 
 export interface TokenState {
   accessToken: string;
-  name: string;
+  userId: Number;
   expireTime: string;
 }
 
 const initialState: TokenState = {
   accessToken: '',
-  name: '',
+  userId: 0,
   expireTime: '',
 };
 
@@ -19,7 +19,7 @@ export const tokenSlice = createSlice({
   reducers: {
     setToken: (state, action) => {
       state.accessToken = action.payload.token;
-      state.name = action.payload.name;
+      state.userId = action.payload.userId;
       state.expireTime = action.payload.exp;
     }
   },
@@ -28,6 +28,6 @@ export const tokenSlice = createSlice({
 export const { setToken } = tokenSlice.actions;
 export const currentAccessToken = (state: RootState) => state.tokenField.accessToken;
 export const currentExpireTime = (state: RootState) => state.tokenField.expireTime;
-export const currentName = (state: RootState) => state.tokenField.name;
+export const currentUserId = (state: RootState) => state.tokenField.userId;
 
 export default tokenSlice.reducer;

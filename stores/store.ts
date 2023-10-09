@@ -1,11 +1,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import trackerSwitch from './trackerSwitch';
 import tokenState from './tokenState';
+import trackerState from './trackerState';
 
 export const store = configureStore({
   reducer: {
     trackerField: trackerSwitch,
     tokenField: tokenState,
+    trackerContainer: trackerState,
   },
 });
 

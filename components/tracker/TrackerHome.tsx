@@ -25,10 +25,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useInsertTracker } from "@/features/tracker";
+import { currentUserId } from "@/stores/tokenState";
 
 const TrackerHome = ({refetchTracker} : any) => {
   const dispatch = useAppDispatch();
   const trackerType = useAppSelector(currentTracker);
+  const userId = useAppSelector(currentUserId);
   const [category, setCategory] = useState<String>("Category");
   const [type, setType] = useState<String>("Type");
 
@@ -67,12 +69,14 @@ const TrackerHome = ({refetchTracker} : any) => {
     onSubmit: async () => {
 
       const {date, name, nominal, type, category} = formik.values;
+      const id = 
       insertTracker({
         date,
         name,
         nominal,
         type,
-        category
+        category,
+        userId
       })
 
       formik.setFieldValue("date", new Date);
