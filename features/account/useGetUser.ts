@@ -5,16 +5,16 @@ import { currentUserId } from "@/stores/tokenState";
 import { useQuery } from "@tanstack/react-query";
 import { useStore } from "react-redux";
 
-export const useFetchTracker = ({ onSuccess, onError }: any) => {
+export const useGetUser = ({ onSuccess, onError }: any) => {
 
   return useQuery({
     queryFn: async () => {
-      const trackerResponse = await axiosInstance.get(`/tracker/`);
-      return trackerResponse;
+      const userResponse = await axiosInstance.get(`/users/`);
+      return userResponse;
     },
     queryKey: ["userId"],
-    onSuccess: (trackerResponse) => {
-      onSuccess(trackerResponse.data);
+    onSuccess: (userResponse) => {
+      onSuccess(userResponse.data);
     },
     onError: (error: any) => {
       onError(error.response);

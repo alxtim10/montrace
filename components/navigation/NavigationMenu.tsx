@@ -57,32 +57,33 @@ export function NavigationMenuDemo() {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Dashboard</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                <ListItem
-                  onClick={() => dashboardRedirect("timeline")}
-                  title="Timeline"
-                >
-                  View your saving and expense timeline.
-                </ListItem>
-                <ListItem title="Profile">Edit your profile.</ListItem>
-                <ListItem title="About Us">Yeah about us.</ListItem>
-                <ListItem onClick={handleLogout} title="Log Out">
-                  Log out your account.
-                </ListItem>
-              </ul>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
             <NavigationMenuTrigger>Tracker</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                 <ListItem onClick={() => dashboardRedirect("")} title="Tracker">
                   Track your expenses and savings.
                 </ListItem>
-                <ListItem title="Expense & Saving Data">
-                  See your expenses and savings data.
+                <ListItem
+                  onClick={() => dashboardRedirect("timeline")}
+                  title="Timeline"
+                >
+                  View your saving and expense timeline.
+                </ListItem>
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>Dashboard</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                <ListItem
+                  onClick={() => dashboardRedirect("profile")}
+                  title="Profile"
+                >
+                  Edit your profile.
+                </ListItem>
+                <ListItem onClick={handleLogout} title="Log Out">
+                  Log out your account.
                 </ListItem>
               </ul>
             </NavigationMenuContent>

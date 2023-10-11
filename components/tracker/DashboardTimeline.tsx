@@ -1,14 +1,43 @@
 "use client"
 
+import { useFetchTracker } from "@/features/tracker";
 import DashboardTimelineCard from "./DashboardTimelineCard";
 import { useAppSelector } from "@/stores/hooks";
-import { currentExpenseData, currentSavingsData } from "@/stores/trackerState";
+import { currentExpenseData, currentSavingsData, setTrackerData } from "@/stores/trackerState";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 const DashboardTimeline = () => {
+
+  const dispatch = useDispatch();
 
 
   const expenseData = useAppSelector(currentExpenseData);
   const savingsData = useAppSelector(currentSavingsData);
+
+  const { data, refetch: fetchTracker } = useFetchTracker({
+    onSuccess: (datas: any) => {
+      const expenseData = datas.filter((data: any) => {
+        return data.type === "Expense";
+      });
+      const savingsData = datas.filter((data: any) => {
+        return data.type === "Savings";
+      });
+
+      dispatch(
+        setTrackerData({
+          mainTimelineData: datas,
+          expenseData: expenseData,
+          savingsData: savingsData,
+        })
+      );
+    },
+    onError: () => {},
+  });
+
+  useEffect(() => {
+    fetchTracker();
+  }, [])
 
   return (
     <div className="pt-20 px-5 pb-5">

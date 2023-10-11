@@ -13,9 +13,9 @@ export default function TrackerLayout({
 }) {
   return (
     <>
-        <Navbar />
-        <NavigationMenuDemo />
-        {children}
+      <Navbar link={"tracker"} />
+      <NavigationMenuDemo />
+      {children}
     </>
   );
 }

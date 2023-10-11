@@ -4,8 +4,8 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 
 export const axiosInstance = axios.create({
-  baseURL: "http://localhost:2000",
-  withCredentials: true,
+  baseURL: "https://alxtim10.github.io/montrace-backend",
+  // baseURL: "http://localhost:2000",
 });
 
 export const axiosJWT = axios.create();

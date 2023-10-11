@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import ReduxProvider from "@/lib/ReduxProvider";
+
 const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

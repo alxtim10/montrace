@@ -16,6 +16,7 @@ export default function Home() {
   const dispatch = useDispatch();
   const { push } = useRouter();
   const [timelineData, setTimeLineData] = useState<any>([]);
+  const userId = useAppSelector(currentUserId);
 
   const { mutate: refreshToken } = useFetchToken({
     onSuccess: (data: any) => {
@@ -32,8 +33,6 @@ export default function Home() {
       push("/");
     },
   });
-
-  const userId = useAppSelector(currentUserId);
 
   const { data, refetch: fetchTracker } = useFetchTracker({
     onSuccess: (datas: any) => {

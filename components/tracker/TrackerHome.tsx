@@ -100,7 +100,6 @@ const TrackerHome = ({refetchTracker} : any) => {
       refetchTracker();
     },
     onError: (data: any) => {
-      console.log(data);
     },
   });
 
