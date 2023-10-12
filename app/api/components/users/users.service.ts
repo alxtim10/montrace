@@ -10,6 +10,11 @@ import {
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+import dotenv from "dotenv";
+
+dotenv.config();
+
+
 export const registerUser = async (newData: any) => {
   if (newData.email == "" || newData.email == "" || newData.email == "")
     throw new Error("Missing fields.");
@@ -19,21 +24,18 @@ export const registerUser = async (newData: any) => {
     throw new Error("Email already registered.");
   }
 
+
   const salt = await bcrypt.genSalt();
   const hashPassword = await bcrypt.hash(newData.password, salt);
   newData.password = hashPassword;
   const user = await createUser(newData);
   const { id: userId, name, email } = user;
-  const accessToken = jwt.sign(
-    { userId, name, email },
-    process.env.ACCESS_TOKEN_SECRET,
-    {
-      expiresIn: "20s",
-    }
-  );
+  const accessToken = jwt.sign({ userId, name, email }, process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET, {
+    expiresIn: "20s",
+  });
   const refreshToken = jwt.sign(
     { userId, name, email },
-    process.env.REFERSH_TOKEN_SECRET,
+    process.env.NEXT_PUBLIC_REFERSH_TOKEN_SECRET,
     {
       expiresIn: "1d",
     }
@@ -56,14 +58,14 @@ export const loginUser = async (loginData: any) => {
   const { id: userId, name, email } = user;
   const accessToken = jwt.sign(
     { userId, name, email },
-    process.env.ACCESS_TOKEN_SECRET,
+    process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET,
     {
       expiresIn: "20s",
     }
   );
   const refreshToken = jwt.sign(
     { userId, name, email },
-    process.env.REFERSH_TOKEN_SECRET,
+    process.env.NEXT_PUBLIC_REFERSH_TOKEN_SECRET,
     {
       expiresIn: "1d",
     }
@@ -92,22 +94,16 @@ export const logoutUser = async (cookieRefreshToken: any) => {
 export const changePassword = async (newData: any) => {
   const user = await findUserByRefreshToken(newData.refreshToken);
   if (!user) throw new Error("Wrong credentials");
-  const match = await bcrypt.compare(
-    newData.password,
-    user.password
-  );
+  const match = await bcrypt.compare(newData.password, user.password);
   if (!match) throw new Error("Wrong password");
 
   const salt = await bcrypt.genSalt();
-  const hashPassword = await bcrypt.hash(
-    newData.newPassword,
-    salt
-  );
- newData.password = hashPassword;
+  const hashPassword = await bcrypt.hash(newData.newPassword, salt);
+  newData.password = hashPassword;
   const updateData = {
     id: user.id,
-    password: hashPassword
-  }
+    password: hashPassword,
+  };
   const newUser = await updatePassword(updateData);
 
   return newUser;
