@@ -42,7 +42,6 @@ const ChangePassword = () => {
       body: JSON.stringify(reqBody)
     });
     const res = await newPassword.json();
-    console.log(res);
     
     toast({
       title: "Success",

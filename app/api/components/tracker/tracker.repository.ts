@@ -11,7 +11,6 @@ export const findTrackerDatas = async (id: number) => {
 };
 
 export const createTrackerData = async (data: any, id?: number) => {
-  console.log(data.date);
   const trackerData = await prisma.trackerData.create({
     data: {
       date: data.date,
