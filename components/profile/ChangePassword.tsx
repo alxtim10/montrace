@@ -3,9 +3,8 @@
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { useChangePassword } from "@/features/account/useChangePassword";
 import { useToast } from "../ui/use-toast";
-import { useGetUser } from "@/features/account/useGetUser";
+import { useRefreshTokenStore } from "@/stores/useRefreshTokenStore";
 
 const ChangePassword = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,6 +13,7 @@ const ChangePassword = () => {
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState();
   const { toast } = useToast();
+  const refreshToken = useRefreshTokenStore((state: any) => state.refreshToken);
 
   const formik = useFormik({
     initialValues: {
@@ -23,47 +23,32 @@ const ChangePassword = () => {
     onSubmit: async () => {
       setIsLoading(true);
       const { password, newPassword } = formik.values;
-
-      changePassword({
-        userId,
+      const reqBody = {
         password,
         newPassword,
-      });
+        refreshToken
+      }
 
+      updatePassword(reqBody);
+      setIsLoading(false);
       formik.setFieldValue("password", "");
       formik.setFieldValue("newPassword", "");
     },
   });
 
-  const { data, refetch: fetchUser } = useGetUser({
-    onSuccess: (datas: any) => {
-      setUsername(datas.name);
-      setEmail(datas.email);
-      setUserId(datas.id);
-    },
-    onError: () => {},
-  });
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
-  const { mutate: changePassword } = useChangePassword({
-    onError: (error: any) => {
-      setErrorMsg(error);
-
-      setIsLoading(false);
-    },
-    onSuccess: (res: any) => {
-      setErrorMsg("");
-      toast({
-        title: res,
-        description: "Password Changed",
-      });
-
-      setIsLoading(false);
-    },
-  });
+  const updatePassword = async (reqBody: any) => {
+    const newPassword = await fetch("/api/password", {
+      method: "PUT",
+      body: JSON.stringify(reqBody)
+    });
+    const res = await newPassword.json();
+    console.log(res);
+    
+    toast({
+      title: "Success",
+      description: "Password Changed",
+    });
+  };
 
   const handleFormInput = (event: any) => {
     formik.setFieldValue(event.target.name, event.target.value);

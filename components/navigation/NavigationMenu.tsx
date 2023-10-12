@@ -13,12 +13,16 @@ import {
 } from "@/components/ui/navigation-menu";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
-import { useLogout } from "@/features/account/useLogout";
 import { useToast } from "../ui/use-toast";
+import { useRefreshTokenStore } from "@/stores/useRefreshTokenStore";
 
 export function NavigationMenuDemo() {
   const router = useRouter();
   const { toast } = useToast();
+  const setRefreshToken = useRefreshTokenStore(
+    (state) => state.setRefreshToken
+  );
+  const refreshToken = useRefreshTokenStore((state: any) => state.refreshToken);
   const handleLogout = async () => {
     Swal.fire({
       title: "Confirmation",
@@ -28,25 +32,27 @@ export function NavigationMenuDemo() {
       showCancelButton: true,
     }).then((result) => {
       if (result.isConfirmed) {
-        logoutUser();
+        logout();
       }
     });
+  };
+
+  const logout = async () => {
+    await fetch("/api/logout?token=" + refreshToken, {
+      method: "POST"
+    });
+    setRefreshToken("");
+    toast({
+      title: "Success",
+      description: "Logout Successful",
+    });
+
+    logoutRedirect();
   };
 
   const logoutRedirect = () => {
     router.push("/");
   };
-  const { mutate: logoutUser } = useLogout({
-    onError: (error: any) => {},
-    onSuccess: (res: any) => {
-      toast({
-        title: res,
-        description: "Logout Successfully",
-      });
-
-      setTimeout(logoutRedirect, 1200);
-    },
-  });
 
   const dashboardRedirect = (page: String) => {
     router.push("/tracker/" + page);

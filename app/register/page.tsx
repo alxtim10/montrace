@@ -5,7 +5,6 @@ import { useFormik } from "formik";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { useRegister } from "@/features/account";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useState } from "react";
 
@@ -29,31 +28,36 @@ export default function Home() {
         setErrorMsg("");
         setIsLoading(true);
         const { email, name, password } = formik.values;
-        registerUser({
+        const reqBody = {
           email,
           name,
           password,
-        });
+        };
+        await register(reqBody);
+
+        setIsLoading(false);
       }
     },
   });
 
-  const { mutate: registerUser, data } = useRegister({
-    onError: (error: any) => {
-      setErrorMsg(error);
-      setIsLoading(false);
-    },
-    onSuccess: (res: any) => {
-      setErrorMsg("");
-      setIsLoading(true);
-      toast({
-        title: res,
-        description: "Account registered",
-      });
+  const register = async (body: any) => {
+    const asd = await fetch("/api/register", {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
 
-      setTimeout(redirect, 1200);
-    },
-  });
+    const res = await asd.json();
+    if (res.status == 400) {
+      setErrorMsg(res.message);
+      return;
+    }
+    toast({
+      title: "Success",
+      description: "Account Registered",
+    });
+    setTimeout(redirect, 1200);
+    setIsLoading(false);
+  };
 
   const redirect = () => {
     push("/login");
@@ -63,10 +67,12 @@ export default function Home() {
     formik.setFieldValue(event.target.name, event.target.value);
   };
 
+  const link = "";
+
   return (
     <>
-      <Navbar />
-      <section className="mt-20 md:mt-28 2xl:mt-56 p-10 flex justify-center items-center max-h-screen">
+      <Navbar link={link} />
+      <section className="mt-20 md:mt-28 2xl:mt-28 p-10 flex justify-center items-center max-h-screen">
         <div className="w-[25rem] md:w-[35rem] h-[35rem] mx-auto bg-[#e8e8e8] rounded-xl shadow-2xl">
           <div className="flex items-center p-3">
             <div className="px-1">

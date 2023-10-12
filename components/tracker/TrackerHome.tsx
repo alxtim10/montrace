@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,8 +9,6 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import "./TrackerHome.css";
-import { expenseCategory, savingsCategory } from "@/data/categoryData";
-import { currentTracker, switcher } from "@/stores/trackerSwitch";
 import { typeData } from "@/data/typeData";
 import { useFormik } from "formik";
 import { format } from "date-fns";
@@ -24,30 +21,41 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useInsertTracker } from "@/features/tracker";
-import { currentUserId } from "@/stores/tokenState";
+import { useTrackerTypeStore } from "@/stores/useTrackerTypeStore";
+import { expenseCategory, savingsCategory } from "@/data/categoryData";
+import { useRefreshTokenStore } from "@/stores/useRefreshTokenStore";
+import { useTrackerDataStore } from "@/stores/useTrackerDataStore";
+import { useToast } from "../ui/use-toast";
 
-const TrackerHome = ({refetchTracker} : any) => {
-  const dispatch = useAppDispatch();
-  const trackerType = useAppSelector(currentTracker);
-  const userId = useAppSelector(currentUserId);
+const TrackerHome = () => {
   const [category, setCategory] = useState<String>("Category");
-  const [type, setType] = useState<String>("Type");
-
-  const [listCategory, setListCategory] = useState<any>([]);
+  const [currenttype, setType] = useState<String>("Type");
+  const { toast } = useToast();
+  const [listCategory, setListCategory] = useState<any>(expenseCategory);
   const [listType] = useState<any>(typeData);
-  const [trackerDate, setDate] = React.useState<any>(new Date);
+  const [trackerDate, setDate] = React.useState<any>(new Date());
+  const trackerType = useTrackerTypeStore((state: any) => state.trackerType);
+  const setCurrentTrackerType = useTrackerTypeStore(
+    (state: any) => state.setTrackerType
+  );
+  const refreshToken = useRefreshTokenStore((state: any) => state.refreshToken);
+  const setTrackerData = useTrackerDataStore(
+    (state: any) => state.setMainTrackerData
+  );
+  const setExpenseData = useTrackerDataStore(
+    (state: any) => state.setExpenseData
+  );
+  const setSavingsData = useTrackerDataStore(
+    (state: any) => state.setSavingsData
+  );
 
-  useEffect(() => {
-    if (trackerType === "Expense") {
+  const handleType = (type: String) => {
+    if (type.toLowerCase() == "expense") {
       setListCategory(expenseCategory);
     } else {
       setListCategory(savingsCategory);
     }
-  }, [trackerType]);
-
-  const handleType = (type: String) => {
-    dispatch(switcher(type));
+    setCurrentTrackerType(type);
     setType(type);
     setCategory("Category");
     formik.setFieldValue("type", type);
@@ -60,53 +68,74 @@ const TrackerHome = ({refetchTracker} : any) => {
 
   const formik = useFormik({
     initialValues: {
-      date: new Date,
+      date: new Date(),
       name: "",
       nominal: 0,
       type: "",
       category: "",
     },
     onSubmit: async () => {
-
-      const {date, name, nominal, type, category} = formik.values;
-      const id = 
-      insertTracker({
+      const { date, name, nominal, type, category } = formik.values;
+      const reqBody = {
         date,
         name,
         nominal,
         type,
         category,
-        userId
-      })
+        refreshToken,
+      };
+      submitHandler(reqBody);
 
-      formik.setFieldValue("date", new Date);
+      formik.setFieldValue("date", new Date());
       formik.setFieldValue("name", "");
       formik.setFieldValue("nominal", 0);
       formik.setFieldValue("type", "");
       formik.setFieldValue("category", "");
-      
       setCategory("Category");
       setType("Type");
-
     },
   });
+
+  const submitHandler = async (body: any) => {
+    const trackerResponse = await fetch("/api/tracker", {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+
+    const res = await trackerResponse.json();
+
+    toast({
+      title: "Success",
+      description: res.message,
+    });
+
+    const fetchTimeline = async () => {
+      const fetchData = await fetch("/api/tracker?token=" + refreshToken);
+      const res = await fetchData.json();
+      setTrackerData(res.data);
+
+      const expenses = res.data.filter((data: any) => {
+        return data.type === "Expense";
+      });
+
+      const savings = res.data.filter((data: any) => {
+        return data.type === "Savings";
+      });
+
+      setExpenseData(expenses);
+      setSavingsData(savings);
+    };
+    fetchTimeline();
+  };
 
   const handleFormInput = (event: any) => {
     formik.setFieldValue(event.target.name, event.target.value);
   };
 
-  const { mutate: insertTracker } = useInsertTracker({
-    onSuccess: (data: any) => {
-      refetchTracker();
-    },
-    onError: (data: any) => {
-    },
-  });
-
   const handleDate = (event: any) => {
     formik.setFieldValue("date", event);
     setDate(event);
-  }
+  };
 
   return (
     <section className="p-10 md:p-20 flex justify-center items-center w-full">
@@ -131,7 +160,11 @@ const TrackerHome = ({refetchTracker} : any) => {
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {trackerDate ? format(trackerDate, "PPP") : <span>Pick a date</span>}
+                  {trackerDate ? (
+                    format(trackerDate, "PPP")
+                  ) : (
+                    <span>Pick a date</span>
+                  )}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">
@@ -172,7 +205,7 @@ const TrackerHome = ({refetchTracker} : any) => {
             <div className="flex justify-around items-center w-full">
               <div className="flex justify-center w-40">
                 <DropdownMenu>
-                  <DropdownMenuTrigger>{type}</DropdownMenuTrigger>
+                  <DropdownMenuTrigger>{currenttype}</DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuSeparator />
                     {listType.map((data: any, i: number) => {

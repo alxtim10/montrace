@@ -3,17 +3,18 @@
 import Navbar from "@/components/navigation/Navbar";
 import { useFormik } from "formik";
 import { useToast } from "@/components/ui/use-toast";
-import { ToastAction } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
-import { useLogin } from "@/features/account";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useState } from "react";
+import { useRefreshTokenStore } from "@/stores/useRefreshTokenStore";
 
 export default function Home() {
   const { toast } = useToast();
   const { push } = useRouter();
   const [errorMsg, setErrorMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const setRefreshToken = useRefreshTokenStore((state) => state.setRefreshToken);
 
   const formik = useFormik({
     initialValues: {
@@ -22,31 +23,38 @@ export default function Home() {
     },
     onSubmit: async () => {
       setErrorMsg("");
+      setIsLoading(true);
       const { email, password } = formik.values;
-      loginUser({
+      const reqBody = {
         email,
         password,
-      });
-    },
-  });
-
-  const { mutate: loginUser, data } = useLogin({
-    onError: (error: any) => {
-      setErrorMsg(error);
+      };
+      await login(reqBody);
 
       setIsLoading(false);
-    },
-    onSuccess: (res: any) => {
-      setErrorMsg("");
-      setIsLoading(true);
-      toast({
-        title: res,
-        description: "Login Successfully",
-      });
+      
 
-      setTimeout(redirect, 1200);
     },
   });
+
+  const login = async (body: any) => {
+    const asd = await fetch("/api/login", {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+
+    const res = await asd.json();
+    if (res.status == 400) {
+      setErrorMsg(res.message);
+      return;
+    }
+    setRefreshToken(res.message);
+    toast({
+      title: "Success",
+      description: "Login Successful",
+    });
+    setTimeout(redirect, 1200);
+  };
 
   const redirect = () => {
     push("/tracker");
@@ -56,9 +64,11 @@ export default function Home() {
     formik.setFieldValue(event.target.name, event.target.value);
   };
 
+  const link = "";
+
   return (
     <section className="">
-      <Navbar link={""}/>
+      <Navbar link={link} />
       <section className="mt-20 md:mt-28 2xl:mt-56 p-10 flex justify-center items-center">
         <div className="w-[25rem] md:w-[35rem] h-[25rem] mx-auto bg-[#e8e8e8] rounded-xl shadow-2xl">
           <div className="flex items-center p-3">
