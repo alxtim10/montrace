@@ -41,8 +41,8 @@ const HomeTimeline = () => {
 
   return (
     <section className="p-5 w-full">
-      <h1 className="text-center">recently used money</h1>
-      <div className="mt-6 flex flex-col gap-5 justify-center items-center">
+      <h1 className="text-center">recent transactions</h1>
+      <div className="mt-3 flex flex-col gap-2 justify-center items-center">
         {trackerData
           ? trackerData
               .slice(-8)
