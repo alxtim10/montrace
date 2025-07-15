@@ -40,7 +40,7 @@ const HomeTimeline = () => {
   }, []);
 
   return (
-    <section className="p-5 min-h-screen w-full">
+    <section className="p-5 w-full">
       <h1 className="text-center">recently used money</h1>
       <div className="mt-6 flex flex-col gap-5 justify-center items-center">
         {trackerData

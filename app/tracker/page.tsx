@@ -1,16 +1,12 @@
 'use client'
 import HomeTimeline from "@/components/tracker/HomeTimeline";
-import TrackerHome from "@/components/tracker/TrackerHome";
+import TrackerDrawer from "@/components/tracker/TrackerDrawer";
 
 export default function Home() {
 
   return (
     <>
       <section className="2xl:flex justify-between">
-        {/* <div className=" 2xl:fixed xl:top-[18%] xl:left-[10%]">
-          <TrackerHome />
-        </div> */}
-
         <div className="p-5">
           <div className="bg-base rounded-2xl py-5 px-5 shadow-md">
             <div>
@@ -37,7 +33,8 @@ export default function Home() {
         <div className="xl:min-w-[45rem]">
           <HomeTimeline />
         </div>
-      </section >
+        <TrackerDrawer />
+      </section>
     </>
   );
 }
