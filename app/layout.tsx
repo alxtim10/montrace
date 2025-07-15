@@ -6,8 +6,8 @@ import { Outfit } from "next/font/google";
 const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Montrac.e",
-  description: "Money Tracker Electronic",
+  title: "Dompet Jenius",
+  description: "Smart Private Ledger",
 };
 
 export default function RootLayout({

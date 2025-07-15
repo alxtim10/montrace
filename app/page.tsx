@@ -27,7 +27,7 @@ export default function Home() {
         </div>
         <div className="bg-[#1234c4] min-h-[49vh] lg:min-h-[99vh] flex flex-col justify-center items-center w-full gap-5">
           <p className="text-white font-semibold tracking-widest">
-            Money Tracker Electronic
+            Dompet Jenius
           </p>
           <Link
             href="/login"
