@@ -82,7 +82,7 @@ export default function Home() {
               <span className="w-4 h-4 rounded-full inline-block bg-green-500 cursor-pointer"></span>
             </div>
           </div>
-          <h1 className="text-center text-3xl text-[#1234c4]">Login</h1>
+          <h1 className="font-bold text-center text-3xl text-[#1234c4]">Login</h1>
 
           <form onSubmit={formik.handleSubmit}>
             <div className="mt-6 flex flex-col justify-center items-center gap-5 p-4">
