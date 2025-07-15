@@ -51,9 +51,9 @@ export const registerUser = async (newData: any) => {
 
 export const loginUser = async (loginData: any) => {
   const user = await findUserByEmail(loginData.email);
-  if (!user) throw new Error("Wrong credentials");
+  if (!user) throw new Error("Wrong credentials - No Email");
   const match = await bcrypt.compare(loginData.password, user.password);
-  if (!match) throw new Error("Wrong credentials");
+  if (!match) throw new Error("Wrong credentials - Wrong Password");
 
   const { id: userId, name, email } = user;
   const accessToken = jwt.sign(
