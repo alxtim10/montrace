@@ -138,15 +138,12 @@ const TrackerHome = () => {
   };
 
   return (
-    <section className="p-10 md:p-20 flex justify-center items-center w-full">
+    <section className="p-5 md:p-20 flex justify-center items-center w-full">
       <div
-        className="bg-[#e8e8e8] w-full md:w-[45rem] p-5 rounded-xl"
-        style={{
-          boxShadow: "15px 15px 30px #bebebe, -15px -15px 30px #ffffff",
-        }}
+        className="bg-[#e8e8e8] shadow-lg border w-full md:w-[45rem] p-5 rounded-xl"
       >
         <h1 className="text-2xl tracking-wider text-center">
-          shoot your {trackerType.toLowerCase()}
+          add your {trackerType.toLowerCase()}
         </h1>
         <form onSubmit={formik.handleSubmit}>
           <div className="flex justify-center items-center mt-10 md:ml-24">
@@ -177,12 +174,12 @@ const TrackerHome = () => {
               </PopoverContent>
             </Popover>
           </div>
-          <div className="flex flex-col gap-5  justify-center items-center">
-            <div className="input-container">
+          <div className="flex flex-col gap-5 justify-center items-center">
+            <div className="input-container w-full">
               <input
                 name="name"
                 placeholder="Title"
-                className="input-field md:w-[40rem]"
+                className="input-field w-full md:w-[40rem]"
                 type="text"
                 onChange={handleFormInput}
                 value={formik.values.name}
@@ -190,11 +187,11 @@ const TrackerHome = () => {
               <label className="input-label">Title</label>
               <span className="input-highlight"></span>
             </div>
-            <div className="input-container">
+            <div className="input-container w-full">
               <input
                 name="nominal"
                 placeholder="Nominal"
-                className="input-field md:w-[40rem]"
+                className="input-field w-full md:w-[40rem]"
                 type="number"
                 onChange={handleFormInput}
                 value={formik.values.nominal}

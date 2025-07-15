@@ -40,9 +40,9 @@ const HomeTimeline = () => {
   }, []);
 
   return (
-    <section className="p-20 min-h-screen  w-50rem">
+    <section className="p-5 min-h-screen w-full">
       <h1 className="text-center">recently used money</h1>
-      <div className="mt-10 flex flex-col gap-5 justify-center items-center">
+      <div className="mt-6 flex flex-col gap-5 justify-center items-center">
         {trackerData
           ? trackerData
               .slice(-8)
@@ -51,7 +51,7 @@ const HomeTimeline = () => {
                 return (
                   <div
                     key={i}
-                    className="bg-white p-5 rounded-lg w-full shadow-2xl md:w-[35rem] text-black"
+                    className="bg-white p-5 rounded-lg w-full shadow-lg border border-gray-100 md:w-[35rem] text-black"
                   >
                     <HomeTimelineCard data={data} />
                   </div>
