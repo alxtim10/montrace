@@ -1,11 +1,11 @@
+'use client'
 import React, { useEffect, useState } from "react";
 import HomeTimelineCard from "./HomeTimelineCard";
-import { useRefreshTokenStore } from "@/stores/useRefreshTokenStore";
 import { useTrackerDataStore } from "@/stores/useTrackerDataStore";
 
 const HomeTimeline = () => {
   // const [timelineData, setTimeLineData] = useState<any>([]);
-  const refreshToken = useRefreshTokenStore((state: any) => state.refreshToken);
+  let userToken = localStorage.getItem('dompetToken');
   const trackerData = useTrackerDataStore(
     (state: any) => state.mainTrackerData
   );
@@ -21,7 +21,7 @@ const HomeTimeline = () => {
 
   useEffect(() => {
     const fetchTimeline = async () => {
-      const fetchData = await fetch("/api/tracker?token=" + refreshToken);
+      const fetchData = await fetch("/api/tracker?token=" + userToken);
       const res = await fetchData.json();
       setTrackerData(res.data);
 
@@ -45,18 +45,18 @@ const HomeTimeline = () => {
       <div className="mt-3 flex flex-col gap-2 justify-center items-center">
         {trackerData
           ? trackerData
-              .slice(-8)
-              .reverse()
-              .map((data: any, i: any) => {
-                return (
-                  <div
-                    key={i}
-                    className="bg-white p-5 rounded-lg w-full shadow-lg border border-gray-100 md:w-[35rem] text-black"
-                  >
-                    <HomeTimelineCard data={data} />
-                  </div>
-                );
-              })
+            .slice(-8)
+            .reverse()
+            .map((data: any, i: any) => {
+              return (
+                <div
+                  key={i}
+                  className="bg-white p-5 rounded-lg w-full shadow-lg border border-gray-100 md:w-[35rem] text-black"
+                >
+                  <HomeTimelineCard data={data} />
+                </div>
+              );
+            })
           : null}
       </div>
     </section>

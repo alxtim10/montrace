@@ -4,7 +4,6 @@ import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { useToast } from "../ui/use-toast";
-import { useRefreshTokenStore } from "@/stores/useRefreshTokenStore";
 
 const ChangePassword = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -13,7 +12,8 @@ const ChangePassword = () => {
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState();
   const { toast } = useToast();
-  const refreshToken = useRefreshTokenStore((state: any) => state.refreshToken);
+
+  let refreshToken = localStorage.getItem("dompetJenius");
 
   const formik = useFormik({
     initialValues: {
@@ -42,7 +42,7 @@ const ChangePassword = () => {
       body: JSON.stringify(reqBody)
     });
     const res = await newPassword.json();
-    
+
     toast({
       title: "Success",
       description: "Password Changed",

@@ -1,12 +1,10 @@
 "use client";
-
 import Navbar from "@/components/navigation/Navbar";
 import { useFormik } from "formik";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useState } from "react";
-import { useRefreshTokenStore } from "@/stores/useRefreshTokenStore";
 import Link from "next/link";
 import { LoginType } from "@/interface";
 
@@ -15,8 +13,6 @@ export default function Home() {
   const { push } = useRouter();
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const setRefreshToken = useRefreshTokenStore((state) => state.setRefreshToken);
 
   const formik = useFormik({
     initialValues: {
@@ -46,16 +42,18 @@ export default function Home() {
     });
 
     const res = await asd.json();
-    if (res.status == 400) {
+
+    if (res.message) {
+      localStorage.setItem('dompetToken', res.message);
+      toast({
+        title: "Success",
+        description: "Login Successful",
+      });
+      setTimeout(redirect, 1200);
+    } else if (res.status == 400) {
       setErrorMsg(res.message);
       return;
     }
-    setRefreshToken(res.message);
-    toast({
-      title: "Success",
-      description: "Login Successful",
-    });
-    setTimeout(redirect, 1200);
   };
 
   const redirect = () => {

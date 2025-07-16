@@ -31,7 +31,6 @@ import {
 } from "@/components/ui/popover";
 import { useTrackerTypeStore } from "@/stores/useTrackerTypeStore";
 import { expenseCategory, savingsCategory } from "@/data/categoryData";
-import { useRefreshTokenStore } from "@/stores/useRefreshTokenStore";
 import { useTrackerDataStore } from "@/stores/useTrackerDataStore";
 import { useToast } from "../ui/use-toast";
 
@@ -47,7 +46,7 @@ const TrackerDrawer = () => {
     const setCurrentTrackerType = useTrackerTypeStore(
         (state: any) => state.setTrackerType
     );
-    const refreshToken = useRefreshTokenStore((state: any) => state.refreshToken);
+    let refreshToken = localStorage.getItem("dompetToken");
     const setTrackerData = useTrackerDataStore(
         (state: any) => state.setMainTrackerData
     );
@@ -148,10 +147,8 @@ const TrackerDrawer = () => {
 
     return (
         <Drawer>
-            <DrawerTrigger>
-                <button className="fixed bottom-7 bg-base text-white rounded-full p-3 left-1/2 transform -translate-x-1/2">
-                    <Plus />
-                </button>
+            <DrawerTrigger className="fixed bottom-7 bg-base text-white rounded-full p-3 left-1/2 transform -translate-x-1/2">
+                <Plus />
             </DrawerTrigger>
             <DrawerContent>
                 <DrawerHeader>
@@ -250,13 +247,11 @@ const TrackerDrawer = () => {
                                 </div>
                             </div>
                             <div className="flex justify-center items-center mt-10">
-                                <DrawerTrigger>
-                                    <button
-                                        type="submit"
-                                        className="px-4 py-2 border border-black rounded-md shadow-lg hover:border-[#1234c4] hover:bg-[#1234c4] hover:text-white transition-all"
-                                    >
-                                        Submit {trackerType}
-                                    </button>
+                                <DrawerTrigger
+                                    type="submit"
+                                    className="px-4 py-2 border border-black rounded-md shadow-lg hover:border-[#1234c4] hover:bg-[#1234c4] hover:text-white transition-all"
+                                >
+                                    Submit {trackerType}
                                 </DrawerTrigger>
                             </div>
                         </form>

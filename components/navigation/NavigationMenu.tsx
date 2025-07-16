@@ -14,15 +14,11 @@ import {
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { useToast } from "../ui/use-toast";
-import { useRefreshTokenStore } from "@/stores/useRefreshTokenStore";
 
 export function NavigationMenuDemo() {
   const router = useRouter();
   const { toast } = useToast();
-  const setRefreshToken = useRefreshTokenStore(
-    (state) => state.setRefreshToken
-  );
-  const refreshToken = useRefreshTokenStore((state: any) => state.refreshToken);
+  let refreshToken = localStorage.getItem("dompetJenius");
   const handleLogout = async () => {
     Swal.fire({
       title: "Confirmation",
@@ -41,7 +37,7 @@ export function NavigationMenuDemo() {
     await fetch("/api/logout?token=" + refreshToken, {
       method: "POST"
     });
-    setRefreshToken("");
+    localStorage.removeItem("dompetToken");
     toast({
       title: "Success",
       description: "Logout Successful",
