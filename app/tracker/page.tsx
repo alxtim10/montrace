@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <>
       {userToken && (
-        <section className="2xl:flex justify-between">
+        <section className="pb-10 2xl:flex justify-between">
           <div className="p-5">
             <div className="bg-base rounded-2xl p-5 shadow-md">
               <div>
