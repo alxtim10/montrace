@@ -2,11 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   getAllTrackerData,
   insertTrackerData,
-} from "../components/tracker/tracker.service";
+} from "../../components/tracker/tracker.service";
+import { extractBearerToken } from "@/lib/utils";
 
 export async function GET(req: NextRequest) {
   try {
-    const token = req.nextUrl.searchParams.get("token") || "";
+    const token = extractBearerToken(req)
+
+    if (!token) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+    }
     const trackerDatas = await getAllTrackerData(token);
 
     return NextResponse.json({ data: trackerDatas });

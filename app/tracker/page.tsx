@@ -2,31 +2,61 @@
 import CarouselBudget from "@/components/budget/CarouselBudget";
 import HomeTimeline from "@/components/tracker/HomeTimeline";
 import TrackerDrawer from "@/components/tracker/TrackerDrawer";
+import {  UserDetail } from "@/interface/user";
+import { formatToRupiah } from "@/lib/utils";
 import { ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Home() {
 
-  let userToken = localStorage.getItem('dompetToken');
+  const [userData, setUserData] = useState<UserDetail>();
+  const [refreshToken, setRefreshToken] = useState<string>();
+
+  const GetUser = async () => {
+    const fetchData = await fetch("/api/protected/user", {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${refreshToken}`,
+      },
+    });
+    const res = await fetchData.json();
+    setUserData(res.data);
+  };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      let userToken = localStorage.getItem('dompetToken');
+      if (userToken) {
+        setRefreshToken(userToken);
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (refreshToken) {
+      GetUser();
+    }
+  }, [refreshToken])
 
   return (
     <>
-      {userToken && (
+      {userData && (
         <section className="pb-10 2xl:flex justify-between">
           <div className="p-5">
             <div className="bg-base rounded-2xl p-5 shadow-md">
               <div>
                 <h1 className="text-white font-bold text-md">Balance</h1>
-                <h1 className="text-white font-bold text-2xl"><span className="text-sm">Rp.</span> 320.500.000</h1>
+                <h1 className="text-white font-bold text-2xl">{formatToRupiah(userData.user.balance)}</h1>
               </div>
               <div className="flex items-center justify-between mt-5">
                 <div>
                   <h1 className="text-white text-sm">Expense</h1>
-                  <h1 className="text-white text-md"><span className="text-sm">Rp.</span> 150.000</h1>
+                  <h1 className="text-white text-md">{formatToRupiah(userData.user.expense)}</h1>
                 </div>
                 <div>
                   <h1 className="text-white text-sm">Savings</h1>
-                  <h1 className="text-white text-md"><span className="text-sm">Rp.</span> 150.000</h1>
+                  <h1 className="text-white text-md">{formatToRupiah(userData.user.saving)}</h1>
                 </div>
               </div>
             </div>
@@ -43,9 +73,9 @@ export default function Home() {
             <CarouselBudget />
           </div>
           <div className="xl:min-w-[45rem]">
-            <HomeTimeline />
+            <HomeTimeline trackers={userData.tracker}/>
           </div>
-          <TrackerDrawer />
+          <TrackerDrawer onSuccess={GetUser} />
         </section>
       )}
     </>

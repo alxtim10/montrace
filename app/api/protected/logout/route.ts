@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { loginUser, logoutUser } from "../components/users/users.service";
+import { loginUser, logoutUser } from "../../components/users/users.service";
 
 export async function POST(req: NextRequest) {
   try {

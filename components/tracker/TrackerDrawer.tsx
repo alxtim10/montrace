@@ -17,7 +17,6 @@ import {
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import "./TrackerDrawer.css";
-import { typeData } from "@/data/typeData";
 import { useFormik } from "formik";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
@@ -29,49 +28,43 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { useTrackerTypeStore } from "@/stores/useTrackerTypeStore";
 import { expenseCategory, savingsCategory } from "@/data/categoryData";
-import { useTrackerDataStore } from "@/stores/useTrackerDataStore";
 import { useToast } from "../ui/use-toast";
+import { TrackerType } from "@/interface/tracker";
+import { categories, type } from "@/data/constants";
 
-const TrackerDrawer = () => {
+const TrackerDrawer = ({ onSuccess }: { onSuccess: () => void }) => {
 
+
+    const [selectedCategoryId, setSelectedCategoryId] = useState<number>();
     const [category, setCategory] = useState<String>("Category");
+    const [selectedTypeId, setSelectedTypeId] = useState<number>();
     const [currenttype, setType] = useState<String>("Type");
     const { toast } = useToast();
     const [listCategory, setListCategory] = useState<any>(expenseCategory);
-    const [listType] = useState<any>(typeData);
     const [trackerDate, setDate] = React.useState<any>(new Date());
-    const trackerType = useTrackerTypeStore((state: any) => state.trackerType);
-    const setCurrentTrackerType = useTrackerTypeStore(
-        (state: any) => state.setTrackerType
-    );
-    let refreshToken = localStorage.getItem("dompetToken");
-    const setTrackerData = useTrackerDataStore(
-        (state: any) => state.setMainTrackerData
-    );
-    const setExpenseData = useTrackerDataStore(
-        (state: any) => state.setExpenseData
-    );
-    const setSavingsData = useTrackerDataStore(
-        (state: any) => state.setSavingsData
-    );
 
-    const handleType = (type: String) => {
-        if (type.toLowerCase() == "expense") {
-            setListCategory(expenseCategory);
-        } else {
-            setListCategory(savingsCategory);
+    let refreshToken = localStorage.getItem("dompetToken");
+
+    const handleType = (typeId: number) => {
+        setSelectedTypeId(typeId)
+        let selectedType = type.find(item => item.id == typeId);
+        if (selectedType) {
+            setType(selectedType.name);
+            formik.setFieldValue("type", selectedType.id);
         }
-        setCurrentTrackerType(type);
-        setType(type);
+        let newList = categories.filter(item => item.typeId == typeId)
+        setListCategory(newList);
         setCategory("Category");
-        formik.setFieldValue("type", type);
     };
 
-    const handleCategory = (category: String) => {
-        setCategory(category);
-        formik.setFieldValue("category", category);
+    const handleCategory = (categoryId: number) => {
+        setSelectedCategoryId(categoryId)
+        let selectedCategory = categories.find(item => item.id == categoryId);
+        if (selectedCategory) {
+            setCategory(selectedCategory.name);
+            formik.setFieldValue("category", selectedCategory.id);
+        }
     };
 
     const formik = useFormik({
@@ -79,18 +72,18 @@ const TrackerDrawer = () => {
             date: new Date(),
             name: "",
             nominal: 0,
-            type: "",
-            category: "",
+            type: 1,
+            category: 1,
         },
         onSubmit: async () => {
             const { date, name, nominal, type, category } = formik.values;
-            const reqBody = {
+            const reqBody: TrackerType = {
                 date,
                 name,
                 nominal,
-                type,
-                category,
-                refreshToken,
+                type: selectedTypeId ?? 1,
+                category: selectedCategoryId ?? 1,
+                refreshToken: refreshToken ?? "",
             };
             submitHandler(reqBody);
 
@@ -104,36 +97,21 @@ const TrackerDrawer = () => {
         },
     });
 
-    const submitHandler = async (body: any) => {
-        const trackerResponse = await fetch("/api/tracker", {
+    const submitHandler = async (body: TrackerType) => {
+        const trackerResponse = await fetch("/api/protected/tracker", {
             method: "POST",
+            headers: {
+                Authorization: `Bearer ${refreshToken}`,
+            },
             body: JSON.stringify(body),
         });
-
         const res = await trackerResponse.json();
 
         toast({
             title: "Success",
             description: res.message,
         });
-
-        const fetchTimeline = async () => {
-            const fetchData = await fetch("/api/tracker?token=" + refreshToken);
-            const res = await fetchData.json();
-            setTrackerData(res.data);
-
-            const expenses = res.data.filter((data: any) => {
-                return data.type === "Expense";
-            });
-
-            const savings = res.data.filter((data: any) => {
-                return data.type === "Savings";
-            });
-
-            setExpenseData(expenses);
-            setSavingsData(savings);
-        };
-        fetchTimeline();
+        onSuccess();
     };
 
     const handleFormInput = (event: any) => {
@@ -219,10 +197,10 @@ const TrackerDrawer = () => {
                                             <DropdownMenuTrigger>{currenttype}</DropdownMenuTrigger>
                                             <DropdownMenuContent>
                                                 <DropdownMenuSeparator />
-                                                {listType.map((data: any, i: number) => {
+                                                {type.map((data: { id: number, name: string }, i: number) => {
                                                     return (
-                                                        <div key={i} onClick={() => handleType(data)}>
-                                                            <DropdownMenuItem>{data}</DropdownMenuItem>
+                                                        <div key={i} onClick={() => handleType(data.id)}>
+                                                            <DropdownMenuItem>{data.name}</DropdownMenuItem>
                                                         </div>
                                                     );
                                                 })}
@@ -236,7 +214,7 @@ const TrackerDrawer = () => {
                                                 <DropdownMenuSeparator />
                                                 {listCategory.map((data: any, i: number) => {
                                                     return (
-                                                        <div key={i} onClick={() => handleCategory(data.name)}>
+                                                        <div key={i} onClick={() => handleCategory(data.id)}>
                                                             <DropdownMenuItem>{data.name}</DropdownMenuItem>
                                                         </div>
                                                     );
@@ -251,7 +229,7 @@ const TrackerDrawer = () => {
                                     type="submit"
                                     className="px-4 py-2 border border-black rounded-md shadow-lg hover:border-[#1234c4] hover:bg-[#1234c4] hover:text-white transition-all"
                                 >
-                                    Submit {trackerType}
+                                    Submit
                                 </DrawerTrigger>
                             </div>
                         </form>

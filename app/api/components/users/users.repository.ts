@@ -7,7 +7,14 @@ export const findUserById = async (id: number) => {
     },
   });
 
-  return user;
+  if (!user) return null;
+
+  return {
+    ...user,
+    balance: user.balance?.toString(),
+    saving: user.saving?.toString(),
+    expense: user.expense?.toString()
+  }
 };
 
 export const findUserByEmail = async (email: any) => {
@@ -17,7 +24,14 @@ export const findUserByEmail = async (email: any) => {
     },
   });
 
-  return user;
+  if (!user) return null;
+
+  return {
+    ...user,
+    balance: user.balance?.toString(),
+    saving: user.saving?.toString(),
+    expense: user.expense?.toString()
+  }
 };
 
 export const createUser = async (data: any) => {
@@ -51,7 +65,14 @@ export const findUserByRefreshToken = async (data: string) => {
     },
   });
 
-  return user;
+  if (!user) return null;
+
+  return {
+    ...user,
+    balance: user.balance?.toString(),
+    saving: user.saving?.toString(),
+    expense: user.expense?.toString()
+  }
 };
 
 export const deleteToken = async (id: number) => {
@@ -64,7 +85,14 @@ export const deleteToken = async (id: number) => {
     },
   });
 
-  return user;
+  if (!user) return null;
+
+  return {
+    ...user,
+    balance: user.balance?.toString(),
+    saving: user.saving?.toString(),
+    expense: user.expense?.toString()
+  }
 };
 
 export const updatePassword = async (data: any) => {
@@ -76,5 +104,13 @@ export const updatePassword = async (data: any) => {
       password: data.password,
     },
   });
-  return user;
+  
+  if (!user) return null;
+
+  return {
+    ...user,
+    balance: user.balance?.toString(),
+    saving: user.saving?.toString(),
+    expense: user.expense?.toString()
+  }
 };

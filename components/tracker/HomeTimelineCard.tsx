@@ -1,11 +1,16 @@
 import { toRupiah, toDate } from "@/utils/format";
 import React, { FC } from "react";
 import moment from 'moment'
+import { TrackerResponse } from "@/interface/tracker";
 
-const HomeTimelineCard: React.FC<any> = (props) => {
-  const { name, type, category } = props.data;
-  const date = toDate(props.data.date);
-  const nominal = toRupiah(props.data.nominal);
+interface HomeTimelineCardProps {
+  data: TrackerResponse
+}
+
+const HomeTimelineCard = ({ data }: HomeTimelineCardProps) => {
+  const { name, type_name, category_name } = data;
+  const date = toDate(data.date);
+  const nominal = toRupiah(data.nominal);
 
   return (
     <div>
@@ -17,8 +22,8 @@ const HomeTimelineCard: React.FC<any> = (props) => {
         Rp. <span className="text-lg md:text-xl font-semibold">{nominal}</span>
       </p>
       <div className="flex justify-between items-center">
-        <p className="text-sm md:text-md">{type}</p>
-        <p className="text-sm md:text-lg">{category}</p>
+        <p className="text-sm md:text-md">{type_name}</p>
+        <p className="text-sm md:text-lg">{category_name}</p>
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import dotenv from "dotenv";
+import { findTrackerDatas } from "../tracker/tracker.repository";
 
 dotenv.config();
 
@@ -107,4 +108,21 @@ export const changePassword = async (newData: any) => {
   const newUser = await updatePassword(updateData);
 
   return newUser;
+};
+
+export const getUser = async (refreshToken: string) => {
+  const user = await findUserByRefreshToken(refreshToken);
+  let trackerDatas;
+  if (user) {
+    trackerDatas = await findTrackerDatas(user?.id);
+  }
+
+  if (user) {
+    return {
+      user: user,
+      tracker: trackerDatas 
+    };
+  } else {
+    throw new Error("User not found");
+  }
 };

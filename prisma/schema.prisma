@@ -16,6 +16,9 @@ model Users {
   email        String
   password     String
   refreshToken String?
+  balance      BigInt?
+  expense      BigInt?
+  saving       BigInt?
   budgets  Budgets[]
   savings Savings[]
   TrackerData  TrackerData[]
@@ -43,8 +46,8 @@ model Categories {
 model Budgets {
   id        Int      @id @default(autoincrement())
   name      String
-  nominal   Int
-  spent     Int
+  nominal   BigInt
+  spent     BigInt
   type     Types    @relation(fields: [typeId], references: [id])
   typeId   Int
   type_name  String
@@ -58,8 +61,8 @@ model Budgets {
 model Savings {
   id        Int      @id @default(autoincrement())
   name      String
-  nominal   Int
-  saved     Int
+  nominal   BigInt
+  saved     BigInt
   type     Types    @relation(fields: [typeId], references: [id])
   typeId   Int
   type_name  String
@@ -74,7 +77,7 @@ model TrackerData {
   id       Int      @id @default(autoincrement())
   date     DateTime
   name     String
-  nominal  Int
+  nominal  BigInt
   type     Types    @relation(fields: [typeId], references: [id])
   typeId   Int
   type_name  String

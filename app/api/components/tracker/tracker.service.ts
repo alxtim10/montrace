@@ -15,7 +15,8 @@ export const getAllTrackerData = async (refreshToken: string) => {
 export const insertTrackerData = async (newData: any) => {
   const user = await findUserByRefreshToken(newData.refreshToken);
 
-  const trackerData = await createTrackerData(newData, user?.id);
+  if(!user) return null;
+  const trackerData = await createTrackerData(newData, user.id);
 
   return trackerData;
 };

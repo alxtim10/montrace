@@ -1,0 +1,15 @@
+-- AlterTable
+ALTER TABLE "Budgets" ALTER COLUMN "nominal" SET DATA TYPE BIGINT,
+ALTER COLUMN "spent" SET DATA TYPE BIGINT;
+
+-- AlterTable
+ALTER TABLE "Savings" ALTER COLUMN "nominal" SET DATA TYPE BIGINT,
+ALTER COLUMN "saved" SET DATA TYPE BIGINT;
+
+-- AlterTable
+ALTER TABLE "TrackerData" ALTER COLUMN "nominal" SET DATA TYPE BIGINT;
+
+-- AlterTable
+ALTER TABLE "Users" ADD COLUMN     "balance" BIGINT,
+ADD COLUMN     "expense" BIGINT,
+ADD COLUMN     "saving" BIGINT;

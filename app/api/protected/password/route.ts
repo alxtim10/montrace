@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { changePassword } from "../components/users/users.service";
+import { changePassword } from "../../components/users/users.service";
 
 export async function PUT(req: NextRequest) {
   try {
