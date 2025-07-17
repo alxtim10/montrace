@@ -5,5 +5,5 @@ export const toRupiah = (price: number) => {
 };
 
 export const toDate = (date: Date) => {
-  return moment(date).format('DD MMMM YYYY');
+  return moment(date).format('DD MMMM YYYY HH:mm');
 }

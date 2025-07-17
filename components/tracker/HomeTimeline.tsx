@@ -18,7 +18,7 @@ const HomeTimeline = ({ trackers }: HomeTimelineProps) => {
               return (
                 <div
                   key={i}
-                  className="bg-white p-5 rounded-lg w-full shadow-lg border border-gray-100 md:w-[35rem] text-black"
+                  className="bg-white px-5 py-3 rounded-lg w-full shadow-lg border border-gray-100 md:w-[35rem] text-black"
                 >
                   <HomeTimelineCard data={data} />
                 </div>

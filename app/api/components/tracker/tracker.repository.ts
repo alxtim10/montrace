@@ -7,6 +7,9 @@ export const findTrackerDatas = async (id: number) => {
     where: {
       userId: id,
     },
+    orderBy: {
+      date: 'desc'
+    }
   });
   
   const safeTrackerDatas = trackerDatas.map((item) => ({
@@ -65,7 +68,7 @@ export const createTrackerData = async (data: TrackerType, id: number) => {
           id: id,
         },
         data: {
-          balance: data.type === 1 ? parseInt(user.balance) - data.nominal : parseInt(user.balance) + data.nominal,
+          balance: data.type === 1 ? Number(user.balance) - Number(data.nominal) : Number(user.balance) + Number(data.nominal),
           saving: Number(user.saving) + Number(saving),
           expense: Number(user.expense) + Number(expense)
         },
