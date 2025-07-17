@@ -10,7 +10,7 @@ const HomeTimeline = ({ trackers }: HomeTimelineProps) => {
 
   return (
     <section className="p-5 w-full">
-      <h1 className="text-center">recent transactions</h1>
+      <h1 className="text-left text-sm">Recent</h1>
       <div className="mt-3 flex flex-col gap-2 justify-center items-center">
         {trackers
           ? trackers
