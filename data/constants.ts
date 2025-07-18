@@ -28,7 +28,7 @@ export const categories = [
     {
         id: 4,
         typeId: 1,
-        name: "wants" 
+        name: "Wants" 
     },
     {
         id: 5,

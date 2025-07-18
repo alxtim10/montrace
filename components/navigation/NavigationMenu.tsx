@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { cn } from "@/lib/utils";
 import {
   NavigationMenu,
@@ -14,11 +13,12 @@ import {
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { useToast } from "../ui/use-toast";
+import { forwardRef, useEffect, useState } from "react";
 
 export function NavigationMenuDemo() {
   const router = useRouter();
+  const [token, setToken] = useState<string>();
   const { toast } = useToast();
-  let refreshToken = localStorage.getItem("dompetJenius");
   const handleLogout = async () => {
     Swal.fire({
       title: "Confirmation",
@@ -34,7 +34,7 @@ export function NavigationMenuDemo() {
   };
 
   const logout = async () => {
-    await fetch("/api/logout?token=" + refreshToken, {
+    await fetch("/api/logout?token=" + token, {
       method: "POST"
     });
     localStorage.removeItem("dompetToken");
@@ -53,6 +53,15 @@ export function NavigationMenuDemo() {
   const dashboardRedirect = (page: String) => {
     router.push("/tracker/" + page);
   };
+
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      let refreshToken = localStorage.getItem("dompetToken");
+      if (refreshToken) {
+        setToken(refreshToken);
+      }
+    }
+  }, [])
 
   return (
     <section className="flex justify-center items-center">
@@ -96,7 +105,7 @@ export function NavigationMenuDemo() {
   );
 }
 
-const ListItem = React.forwardRef<
+const ListItem = forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a">
 >(({ className, title, children, ...props }, ref) => {
