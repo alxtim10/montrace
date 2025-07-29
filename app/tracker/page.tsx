@@ -61,7 +61,7 @@ export default function Home() {
       {userData && (
         <section className="pb-10 2xl:flex justify-between">
           <div className="p-5">
-            <div className="bg-base rounded-2xl p-5 shadow-md">
+            <div className="bg-gradient-to-br from-base to-[#170b71] rounded-2xl p-4 shadow-md">
               <div>
                 <h1 className="text-white font-bold text-md">Balance</h1>
                 <h1 className="text-white font-bold text-2xl">
@@ -70,20 +70,42 @@ export default function Home() {
               </div>
               <div className="flex items-center justify-between mt-5">
                 <div>
-                  <h1 className="text-white text-sm">Expense</h1>
+                  <h1 className="text-gray-300 text-xs">Expense</h1>
                   <h1 className="text-white text-md">
                     {formatToRupiah(userData.user.expense)}
                   </h1>
                 </div>
                 <div>
-                  <h1 className="text-white text-sm">Savings</h1>
+                  <h1 className="text-gray-300 text-xs">Income</h1>
                   <h1 className="text-white text-md">
                     {formatToRupiah(userData.user.saving)}
                   </h1>
                 </div>
               </div>
+
+            </div>
+            <div className="mt-1 p-4 pt-2 w-full bg-gradient-to-br from-base to-[#170b71] rounded-2xl shadow-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-20 border border-[#5e6c97]">
+              <h1 className="text-white text-md font-bold">Saving Goal</h1>
+
+              <div className="mt-2 flex items-center justify-between">
+                <h1 className="text-sm text-white">{formatToRupiah(Number(5000000))}</h1>
+                <h1 className="text-sm text-white">{formatToRupiah(Number(500000000))}</h1>
+              </div>
+
+              <div className="w-full bg-gray-400 rounded-full h-2 mt-2 overflow-hidden">
+                <div
+                  className="bg-white h-2 rounded-full transition-all duration-300"
+                  style={{
+                    width: `${Number(1000) > 0
+                      ? Math.min((Number(1000) / Number(5000)) * 100, 100)
+                      : 0
+                      }%`,
+                  }}
+                />
+              </div>
             </div>
           </div>
+
           <div className="px-5 mb-5">
             <h1 className="flex items-center gap-1">
               <Sparkles className="w-4 h-4 text-base" /> AI Suggestions
@@ -107,7 +129,7 @@ export default function Home() {
               )}
             </Link>
             {budgetData.length ? (
-              <CarouselBudget data={budgetData}/>
+              <CarouselBudget data={budgetData} />
             ) : (
               <div className="px-5">
                 <Link
