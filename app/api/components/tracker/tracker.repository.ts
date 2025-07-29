@@ -11,12 +11,12 @@ export const findTrackerDatas = async (id: number) => {
       date: 'desc'
     }
   });
-  
+
   const safeTrackerDatas = trackerDatas.map((item) => ({
     ...item,
     nominal: item.nominal.toString(), // 👈 convert BigInt to string
   }));
-  
+
   return safeTrackerDatas;
 };
 
@@ -32,6 +32,13 @@ export const createTrackerData = async (data: TrackerType, id: number) => {
       id: data.category,
     },
   })
+  const budget = await prisma.budgets.findFirst({
+    where: {
+      userId: id,
+      categoryId: category?.id
+    }
+  })
+
   let trackerData;
   if (type && category) {
     trackerData = await prisma.trackerData.create({
@@ -73,6 +80,16 @@ export const createTrackerData = async (data: TrackerType, id: number) => {
           expense: Number(user.expense) + Number(expense)
         },
       });
+      if (budget) {
+        await prisma.budgets.update({
+          where: {
+            id: budget.id
+          },
+          data: {
+            spent: Number(budget.spent) + Number(expense)
+          }
+        })
+      }
     }
   }
   return {

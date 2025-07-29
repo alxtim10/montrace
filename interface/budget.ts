@@ -13,3 +13,14 @@ export interface BudgetType {
     refreshToken?: string;
     balance?: string;
 }
+
+export interface BudgetRequestType {
+    name: string;
+    nominal?: number;
+    spent?: number;
+    typeId: number;
+    type_name: string;
+    categoryId: number;
+    category_name: string;
+    userId: number;
+}

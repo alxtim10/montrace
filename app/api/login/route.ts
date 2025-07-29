@@ -8,6 +8,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       message: user.refreshToken,
+      userId: user.userId,
       status: 200,
     });
   } catch (error: any) {

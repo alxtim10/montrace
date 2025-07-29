@@ -45,6 +45,7 @@ export default function Home() {
 
     if (res.message) {
       localStorage.setItem('dompetToken', res.message);
+      localStorage.setItem('dompetUserId', res.userId);
       toast({
         title: "Success",
         description: "Login Successful",

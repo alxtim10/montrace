@@ -107,7 +107,7 @@ export default function Home() {
               )}
             </Link>
             {budgetData.length ? (
-              <CarouselBudget />
+              <CarouselBudget data={budgetData}/>
             ) : (
               <div className="px-5">
                 <Link

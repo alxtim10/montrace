@@ -77,6 +77,7 @@ export const loginUser = async (loginData: any) => {
   const tokenData = {
     accessToken,
     refreshToken,
+    userId
   };
 
   return tokenData;
